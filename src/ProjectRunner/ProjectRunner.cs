@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 
 namespace JeremyTCD.ProjectRunner
 {
@@ -33,23 +34,25 @@ namespace JeremyTCD.ProjectRunner
         /// <returns>
         /// Integer return value of entry method or null if entry method returns void
         /// </returns>
-        public virtual int? Run(string projFile, string entryAssemblyFile, string entryClassName, string[] args)
+        public virtual int? Run(string projFile, string entryAssemblyName, string entryClassName, string[] args)
         {
             if (_loggingService.IsEnabled(LogLevel.Information))
             {
                 _loggingService.LogInformation(Strings.Log_RunningProject, projFile, String.Concat(args, ','));
             }
 
-            string absProjFile = _pathService.GetAbsolutePath(projFile);
-            string directory = _directoryService.GetParent(absProjFile).FullName;
+            string absProjFilePath = _pathService.GetAbsolutePath(projFile);
+            string directory = _directoryService.GetParent(absProjFilePath).FullName;
+            string outDir = $"{directory}/bin/publish";
+            string entryAssemblyFilePath = $"{outDir}/{entryAssemblyName}.dll";
 
             // Build project
             IEnumerable<string> targetFrameworks = _msBuildService.GetTargetFrameworks(projFile);
-            _msBuildService.Build(absProjFile, $"/t:restore,publish /p:configuration=release,targetframework={targetFrameworks.First()}");
+            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:outdir={outDir},configuration=release,targetframework={targetFrameworks.First()}");
 
             // Load entry assembly
-            DirectoryAssemblyLoadContext dalc = new DirectoryAssemblyLoadContext(directory);
-            Assembly entryAssembly = dalc.LoadFromAssemblyPath(entryAssemblyFile);
+            AssemblyLoadContext alc = new DirectoryAssemblyLoadContext(outDir);
+            Assembly entryAssembly = alc.LoadFromAssemblyPath(entryAssemblyFilePath);
 
             // Run entry method
             Type entryType = entryAssembly.GetType(entryClassName);
