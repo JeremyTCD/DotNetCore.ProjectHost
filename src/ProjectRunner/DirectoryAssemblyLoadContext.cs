@@ -11,7 +11,7 @@ namespace JeremyTCD.ProjectRunner
     public class DirectoryAssemblyLoadContext : AssemblyLoadContext
     {
         private string _directory { get; }
-        private Dictionary<string, string> _assemblyFiles { get; }
+        private Dictionary<string, string> _assemblyFiles { get; } = new Dictionary<string, string>();
 
         public DirectoryAssemblyLoadContext(string directory)
         {
