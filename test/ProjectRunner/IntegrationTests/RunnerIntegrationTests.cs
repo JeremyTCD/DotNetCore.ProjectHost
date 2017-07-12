@@ -8,13 +8,13 @@ using Xunit;
 
 namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
 {
-    public class ProjectRunnerIntegrationTests
+    public class RunnerIntegrationTests
     {
         private MockRepository _mockRepository { get; }
-        private string _tempDir { get; } = Path.Combine(Path.GetTempPath(), $"{nameof(ProjectRunner)}Temp");
+        private string _tempDir { get; } = Path.Combine(Path.GetTempPath(), $"{nameof(Runner)}Temp");
         private DirectoryService _directoryService { get; }
 
-        public ProjectRunnerIntegrationTests()
+        public RunnerIntegrationTests()
         {
             _mockRepository = new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
 
@@ -29,26 +29,26 @@ namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
         public void Run_RunsEntryMethod()
         {
             // Arrange
-            string solutionDir = Path.GetFullPath(typeof(ProjectRunnerIntegrationTests).GetTypeInfo().Assembly.Location + "../../../../../../../");
-            string projectDir = "ProjectRunner.StubProject";
-            string projectName = "JeremyTCD.ProjectRunner.Tests.StubProject";
+            string solutionDir = Path.GetFullPath(typeof(RunnerIntegrationTests).GetTypeInfo().Assembly.Location + "../../../../../../../");
+            string projectDir = "StubProject.EntryPoint";
+            string projectName = projectDir;
             string projectAbsSrcDir = $"{solutionDir}test/{projectDir}";
             string projectAbsDestDir = $"{_tempDir}/{projectDir}";
             string projectAbsFilePath = $"{_tempDir}/{projectDir}/{projectName}.csproj";
             string entryAssemblyName = projectName;
-            string entryClassName = $"{projectName}.StubClass";
+            string entryClassName = $"{projectName}.EntryPointStubClass";
             string[] stubArgs = new string[] { "test", "args" };
 
             _directoryService.Copy(projectAbsSrcDir, projectAbsDestDir, excludePatterns: new string[] { "^bin$", "^obj$" });
 
             IContainer container = new Container(new ProjectRunnerRegistry());
-            ProjectRunner projectRunner = container.GetInstance<ProjectRunner>();
+            Runner runner = container.GetInstance<Runner>();
 
             ThreadSpecificStringWriter tssw = new ThreadSpecificStringWriter();
             Console.SetOut(tssw);
 
             // Act
-            int? result = projectRunner.Run(projectAbsFilePath, entryAssemblyName, entryClassName, stubArgs);
+            int? result = runner.Run(projectAbsFilePath, entryAssemblyName, entryClassName, stubArgs);
 
             // Assert
             Assert.Equal(0, result);

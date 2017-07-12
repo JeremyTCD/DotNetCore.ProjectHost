@@ -7,7 +7,7 @@ Create a class library project for use as a configuration project. It must have 
 referenced as part of a package.
 
 Project runner entry method:
-`JeremyTCD.ProjectRunner.ProjectRunner.Run(string projFile, string entryAssemblyFile, string entryClassName, string[] args)`
+`JeremyTCD.ProjectRunner.Runner.Run(string projFile, string entryAssemblyFile, string entryClassName, string[] args)`
 Does the following:
 - Restores, builds and publishes (to a folder) project specified by `projectFile`
 - Creates `AssemblyLoadContext` that loads assemblies from build output folder

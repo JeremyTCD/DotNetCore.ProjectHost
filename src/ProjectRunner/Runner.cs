@@ -7,9 +7,9 @@ using System.Runtime.Loader;
 
 namespace JeremyTCD.ProjectRunner
 {
-    public class ProjectRunner
+    public class Runner
     {
-        private ILoggingService<ProjectRunner> _loggingService { get; }
+        private ILoggingService<Runner> _loggingService { get; }
         private IPathService _pathService { get; }
         private IMSBuildService _msBuildService { get; }
         private IDirectoryService _directoryService { get; }
@@ -17,7 +17,7 @@ namespace JeremyTCD.ProjectRunner
         private IActivatorService _activatorService { get; }
         private ITypeService _typeService { get; }
 
-        public ProjectRunner(ILoggingService<ProjectRunner> loggingService, IPathService pathService, IMSBuildService msbuildService, IActivatorService activatorService,
+        public Runner(ILoggingService<Runner> loggingService, IPathService pathService, IMSBuildService msbuildService, IActivatorService activatorService,
             IDirectoryService directoryService, ITypeService typeService, IAssemblyLoadContextFactory assemblyLoadContextFactory)
         {
             _activatorService = activatorService;
