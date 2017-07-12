@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <OutDir>bin/artifacts</OutDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StubProject.Referencee\StubProject.Referencee.csproj" />
+  </ItemGroup>
+
+</Project>

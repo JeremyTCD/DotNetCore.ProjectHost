@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace JeremyTCD.ProjectRunner.Tests.StubProject
+namespace StubProject.EntryPoint
 {
-    public class StubClass
+    public class EntryPointStubClass
     {
         public static int Main(string[] args)
         {
