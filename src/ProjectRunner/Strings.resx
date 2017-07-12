@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Exception_AssemblyDoesNotHaveClass" xml:space="preserve">
+    <value>Assembly "{0}" does not have a class named "{1}"</value>
+  </data>
+  <data name="Exception_ClassDoesNotHaveMainMethod" xml:space="preserve">
+    <value>Class "{0}" in Assembly "{1}" does not contain a Main method (entry point)</value>
+  </data>
+  <data name="Log_LoadingAssembly" xml:space="preserve">
+    <value>Loading assembly "{0}" into an AssemblyLoadContext that resolves from directory "{1}"</value>
+  </data>
+  <data name="Log_PublishingProject" xml:space="preserve">
+    <value>Publishing "{0}" build of project "{1}" to directory "{2}"</value>
+  </data>
+  <data name="Log_RunningMainMethod" xml:space="preserve">
+    <value>Running Main method from class "{0}" of assembly "{1}" with args "{2}"</value>
+  </data>
   <data name="Log_RunningProject" xml:space="preserve">
     <value>Running project "{0}" with arguments "{1}"</value>
   </data>

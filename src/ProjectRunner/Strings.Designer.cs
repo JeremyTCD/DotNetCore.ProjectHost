@@ -62,6 +62,51 @@ namespace JeremyTCD.ProjectRunner {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assembly &quot;{0}&quot; does not have a class named &quot;{1}&quot;.
+        /// </summary>
+        public static string Exception_AssemblyDoesNotHaveClass {
+            get {
+                return ResourceManager.GetString("Exception_AssemblyDoesNotHaveClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class &quot;{0}&quot; in Assembly &quot;{1}&quot; does not contain a Main method (entry point).
+        /// </summary>
+        public static string Exception_ClassDoesNotHaveMainMethod {
+            get {
+                return ResourceManager.GetString("Exception_ClassDoesNotHaveMainMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading assembly &quot;{0}&quot; into an AssemblyLoadContext that resolves from directory &quot;{1}&quot;.
+        /// </summary>
+        public static string Log_LoadingAssembly {
+            get {
+                return ResourceManager.GetString("Log_LoadingAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publishing &quot;{0}&quot; build of project &quot;{1}&quot; to directory &quot;{2}&quot;.
+        /// </summary>
+        public static string Log_PublishingProject {
+            get {
+                return ResourceManager.GetString("Log_PublishingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running Main method from class &quot;{0}&quot; of assembly &quot;{1}&quot; with args &quot;{2}&quot;.
+        /// </summary>
+        public static string Log_RunningMainMethod {
+            get {
+                return ResourceManager.GetString("Log_RunningMainMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Running project &quot;{0}&quot; with arguments &quot;{1}&quot;.
         /// </summary>
         public static string Log_RunningProject {

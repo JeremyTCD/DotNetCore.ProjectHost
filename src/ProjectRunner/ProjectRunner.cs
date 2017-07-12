@@ -1,7 +1,6 @@
 ﻿using JeremyTCD.DotNetCore.Utils;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -14,23 +13,29 @@ namespace JeremyTCD.ProjectRunner
         private IPathService _pathService { get; }
         private IMSBuildService _msBuildService { get; }
         private IDirectoryService _directoryService { get; }
+        private IAssemblyLoadContextFactory _assemblyLoadContextFactory { get; }
+        private IActivatorService _activatorService { get; }
+        private ITypeService _typeService { get; }
 
-        public ProjectRunner(ILoggingService<ProjectRunner> loggingService, IPathService pathService, IMSBuildService msbuildService,
-            IDirectoryService directoryService)
+        public ProjectRunner(ILoggingService<ProjectRunner> loggingService, IPathService pathService, IMSBuildService msbuildService, IActivatorService activatorService,
+            IDirectoryService directoryService, ITypeService typeService, IAssemblyLoadContextFactory assemblyLoadContextFactory)
         {
+            _activatorService = activatorService;
             _loggingService = loggingService;
             _pathService = pathService;
             _msBuildService = msbuildService;
             _directoryService = directoryService;
+            _assemblyLoadContextFactory = assemblyLoadContextFactory;
+            _typeService = typeService;
         }
 
-        // TODO split up into smaller methods and add exceptions for irrecoverable situations like if no Main method exists
         /// <summary>
         /// Restores, builds and publishes project specified by <paramref name="projFile"/>. Loads entry assembly specified by <paramref name="entryAssemblyFile"/> in an <see cref="AssemblyLoadContext"/>.
         /// Calls main method with args <paramref name="args"/>.
         /// </summary>
         /// <param name="projFile"></param>
         /// <param name="args"></param> 
+        /// <param name="entryAssemblyName"></param>
         /// <returns>
         /// Integer return value of entry method or null if entry method returns void
         /// </returns>
@@ -38,7 +43,7 @@ namespace JeremyTCD.ProjectRunner
         {
             if (_loggingService.IsEnabled(LogLevel.Information))
             {
-                _loggingService.LogInformation(Strings.Log_RunningProject, projFile, String.Concat(args, ','));
+                _loggingService.LogInformation(Strings.Log_RunningProject, projFile, String.Join(",", args));
             }
 
             string absProjFilePath = _pathService.GetAbsolutePath(projFile);
@@ -46,22 +51,62 @@ namespace JeremyTCD.ProjectRunner
             string outDir = $"{directory}/bin/publish";
             string entryAssemblyFilePath = $"{outDir}/{entryAssemblyName}.dll";
 
-            // Build project
-            IEnumerable<string> targetFrameworks = _msBuildService.GetTargetFrameworks(projFile);
-            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:outdir={outDir},configuration=release,targetframework={targetFrameworks.First()}");
+            // Publish project
+            PublishProject(absProjFilePath, outDir);
 
             // Load entry assembly
-            AssemblyLoadContext alc = new DirectoryAssemblyLoadContext(outDir);
-            Assembly entryAssembly = alc.LoadFromAssemblyPath(entryAssemblyFilePath);
+            Assembly entryAssembly = LoadEntryAssembly(outDir, entryAssemblyFilePath);
 
             // Run entry method
-            Type entryType = entryAssembly.GetType(entryClassName);
-            MethodInfo method = entryType.GetMethod("Main", 
-                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
-            Object entryObject = Activator.CreateInstance(entryType);
-            object result = method.Invoke(entryObject, args);
+            object result = RunMainMethod(entryAssembly, entryClassName, args);
 
             return result as int?;
+        }
+
+        // TODO should be internal or private but testable in isolation
+        public void PublishProject(string absProjFilePath, string outDir)
+        {
+            // Only need to build for 1 framework
+            string targetFramework = _msBuildService.GetTargetFrameworks(absProjFilePath).First();
+
+            _loggingService.LogDebug(Strings.Log_PublishingProject, targetFramework, absProjFilePath, outDir);
+
+            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:outdir={outDir},configuration=release,targetframework={targetFramework}");
+        }
+
+        // TODO should be internal or private but testable in isolation
+        public Assembly LoadEntryAssembly(string outDir, string entryAssemblyFilePath)
+        {
+            _loggingService.LogDebug(Strings.Log_LoadingAssembly, entryAssemblyFilePath, outDir);
+
+            AssemblyLoadContext alc = _assemblyLoadContextFactory.CreateAssemblyLoadContext(outDir);
+
+            return alc.LoadFromAssemblyPath(entryAssemblyFilePath);
+        }
+
+        // TODO should be internal or private but testable in isolation
+        public object RunMainMethod(Assembly entryAssembly, string entryClassName, string[] args)
+        {
+            if (_loggingService.IsEnabled(LogLevel.Debug))
+            {
+                _loggingService.LogDebug(Strings.Log_RunningMainMethod, entryClassName, entryAssembly.GetName().Name, String.Join(",", args)); 
+            }
+
+            Type entryType = entryAssembly.GetType(entryClassName);
+            if(entryType == null)
+            {
+                throw new Exception(string.Format(Strings.Exception_AssemblyDoesNotHaveClass, entryAssembly.GetName().Name, entryClassName));
+            }
+
+            MethodInfo entryMethod = _typeService.GetMethod(entryType, "Main", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+            if(entryMethod == null)
+            {
+                throw new Exception(string.Format(Strings.Exception_ClassDoesNotHaveMainMethod, entryClassName, entryAssembly.GetName().Name));
+            }
+
+            Object entryObject = _activatorService.CreateInstance(entryType);
+
+            return entryMethod.Invoke(entryObject, new object[] { args });
         }
     }
 }
