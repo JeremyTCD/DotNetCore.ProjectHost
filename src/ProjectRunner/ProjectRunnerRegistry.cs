@@ -19,8 +19,10 @@ namespace JeremyTCD.ProjectRunner
             For<IActivatorService>().Singleton().Use<ActivatorService>();
             For(typeof(ILoggingService<>)).Singleton().Use(typeof(LoggingService<>));
             For<IProcessService>().Singleton().Use<ProcessService>();
+            For<ITypeService>().Singleton().Use<TypeService>();
 
             For<ProjectRunner>().Singleton().Use<ProjectRunner>();
+            For<IAssemblyLoadContextFactory>().Singleton().Use<DefaultAssemblyLoadContextFactory>();
         }
     }
 }
