@@ -36,12 +36,12 @@ namespace JeremyTCD.ProjectRunner
         /// <param name="projFile"></param>
         /// <param name="args"></param> 
         /// <param name="entryAssemblyName"></param>
-        /// <param name="entryClassName"></param>
+        /// <param name="entryClassName">Full name (inclusive of namespace)</param>
         /// <param name="entryMethodName"></param>
         /// <returns>
         /// Integer return value of entry method or null if entry method returns void
         /// </returns>
-        public virtual int? Run(string projFile, string entryAssemblyName, string entryClassName = "Program", string entryMethodName = "Main", string[] args = null)
+        public virtual int? Run(string projFile, string entryAssemblyName, string entryClassName, string entryMethodName = "Main", string[] args = null)
         {
             if (_loggingService.IsEnabled(LogLevel.Information))
             {
@@ -74,7 +74,7 @@ namespace JeremyTCD.ProjectRunner
 
             _loggingService.LogDebug(Strings.Log_PublishingProject, targetFramework, absProjFilePath, outDir);
 
-            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:outdir={outDir},configuration=release,targetframework={targetFramework}");
+            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:outdir={outDir},configuration=release");
         }
 
         // TODO should be internal or private but testable in isolation
