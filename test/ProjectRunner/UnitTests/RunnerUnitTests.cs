@@ -17,7 +17,7 @@ namespace JeremyTCD.ProjectRunner.Tests.UnitTests
         }
 
         [Fact]
-        public void RunMainMethod_ThrowsExceptionIfAssemblyDoesNotHaveSpecifiedEntryClass()
+        public void RunEntryMethod_ThrowsExceptionIfAssemblyDoesNotHaveSpecifiedEntryClass()
         {
             // Arrange
             string testEntryClassName = "testEntryClassName";
@@ -34,17 +34,18 @@ namespace JeremyTCD.ProjectRunner.Tests.UnitTests
             Runner runner = CreateRunner(mockRunnerLS.Object);
 
             // Act and Assert
-            Exception result = Assert.Throws<Exception>(() => runner.RunMainMethod(mockAssembly.Object, testEntryClassName, null));
+            Exception result = Assert.Throws<Exception>(() => runner.RunEntryMethod(mockAssembly.Object, testEntryClassName, null, null));
             _mockRepository.VerifyAll();
             Assert.Equal(string.Format(Strings.Exception_AssemblyDoesNotHaveClass, testAssemblyName, testEntryClassName), result.Message);
         }
 
         [Fact]
-        public void RunMainMethod_ThrowsExceptionIfEntryClassDoesNotHaveMainMethod()
+        public void RunEntryMethod_ThrowsExceptionIfEntryClassDoesNotHaveEntryMethod()
         {
             // Arrange
             string testEntryClassName = "testEntryClassName";
             string testAssemblyName = "testAssemblyName";
+            string testEntryMethodName = "testEntryMethodName";
 
             Mock<ILoggingService<Runner>> mockRunnerLS = _mockRepository.Create<ILoggingService<Runner>>();
             mockRunnerLS.Setup(p => p.IsEnabled(LogLevel.Debug)).Returns(false);
@@ -57,14 +58,14 @@ namespace JeremyTCD.ProjectRunner.Tests.UnitTests
 
             Mock<ITypeService> mockTypeService = _mockRepository.Create<ITypeService>();
             mockTypeService.
-                Setup(t => t.GetMethod(mockType.Object, "Main", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)).
+                Setup(t => t.GetMethod(mockType.Object, testEntryMethodName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)).
                 Returns((MethodInfo)null);
 
             Runner runner = CreateRunner(mockRunnerLS.Object, typeService: mockTypeService.Object);
 
             // Act and Assert
-            Exception result = Assert.Throws<Exception>(() => runner.RunMainMethod(mockAssembly.Object, testEntryClassName, null));
-            Assert.Equal(string.Format(Strings.Exception_ClassDoesNotHaveMainMethod, testEntryClassName, testAssemblyName), result.Message);
+            Exception result = Assert.Throws<Exception>(() => runner.RunEntryMethod(mockAssembly.Object, testEntryClassName, testEntryMethodName, null));
+            Assert.Equal(string.Format(Strings.Exception_ClassDoesNotHaveEntryMethod, testEntryClassName, testAssemblyName, testEntryMethodName), result.Message);
         }
 
         private Runner CreateRunner(ILoggingService<Runner> loggingService = null, IPathService pathService = null, 

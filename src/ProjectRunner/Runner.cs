@@ -31,21 +31,24 @@ namespace JeremyTCD.ProjectRunner
 
         /// <summary>
         /// Restores, builds and publishes project specified by <paramref name="projFile"/>. Loads entry assembly specified by <paramref name="entryAssemblyFile"/> in an <see cref="AssemblyLoadContext"/>.
-        /// Calls main method with args <paramref name="args"/>.
+        /// Calls entry method with args <paramref name="args"/>.
         /// </summary>
         /// <param name="projFile"></param>
         /// <param name="args"></param> 
         /// <param name="entryAssemblyName"></param>
+        /// <param name="entryClassName"></param>
+        /// <param name="entryMethodName"></param>
         /// <returns>
         /// Integer return value of entry method or null if entry method returns void
         /// </returns>
-        public virtual int? Run(string projFile, string entryAssemblyName, string entryClassName, string[] args)
+        public virtual int? Run(string projFile, string entryAssemblyName, string entryClassName = "Program", string entryMethodName = "Main", string[] args = null)
         {
             if (_loggingService.IsEnabled(LogLevel.Information))
             {
                 _loggingService.LogInformation(Strings.Log_RunningProject, projFile, String.Join(",", args));
             }
 
+            // TODO if already built (plugin folder etc) just need outDir, proj file not relevant
             string absProjFilePath = _pathService.GetAbsolutePath(projFile);
             string directory = _directoryService.GetParent(absProjFilePath).FullName;
             string outDir = $"{directory}/bin/publish";
@@ -58,7 +61,7 @@ namespace JeremyTCD.ProjectRunner
             Assembly entryAssembly = LoadEntryAssembly(outDir, entryAssemblyFilePath);
 
             // Run entry method
-            object result = RunMainMethod(entryAssembly, entryClassName, args);
+            object result = RunEntryMethod(entryAssembly, entryClassName, entryMethodName, args);
 
             return result as int?;
         }
@@ -85,11 +88,11 @@ namespace JeremyTCD.ProjectRunner
         }
 
         // TODO should be internal or private but testable in isolation
-        public object RunMainMethod(Assembly entryAssembly, string entryClassName, string[] args)
+        public object RunEntryMethod(Assembly entryAssembly, string entryClassName, string entryMethodName, string[] args)
         {
             if (_loggingService.IsEnabled(LogLevel.Debug))
             {
-                _loggingService.LogDebug(Strings.Log_RunningMainMethod, entryClassName, entryAssembly.GetName().Name, String.Join(",", args)); 
+                _loggingService.LogDebug(Strings.Log_RunningEntryMethod, entryMethodName, entryClassName, entryAssembly.GetName().Name, String.Join(",", args)); 
             }
 
             Type entryType = entryAssembly.GetType(entryClassName);
@@ -98,10 +101,10 @@ namespace JeremyTCD.ProjectRunner
                 throw new Exception(string.Format(Strings.Exception_AssemblyDoesNotHaveClass, entryAssembly.GetName().Name, entryClassName));
             }
 
-            MethodInfo entryMethod = _typeService.GetMethod(entryType, "Main", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+            MethodInfo entryMethod = _typeService.GetMethod(entryType, entryMethodName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
             if(entryMethod == null)
             {
-                throw new Exception(string.Format(Strings.Exception_ClassDoesNotHaveMainMethod, entryClassName, entryAssembly.GetName().Name));
+                throw new Exception(string.Format(Strings.Exception_ClassDoesNotHaveEntryMethod, entryClassName, entryAssembly.GetName().Name, entryMethodName));
             }
 
             Object entryObject = _activatorService.CreateInstance(entryType);

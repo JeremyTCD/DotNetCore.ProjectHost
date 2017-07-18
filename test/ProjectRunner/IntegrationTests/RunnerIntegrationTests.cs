@@ -37,6 +37,7 @@ namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
             string projectAbsFilePath = $"{_tempDir}/{projectDir}/{projectName}.csproj";
             string entryAssemblyName = projectName;
             string entryClassName = $"{projectName}.EntryPointStubClass";
+            string entryMethodName = "Main";
             string[] stubArgs = new string[] { "test", "args" };
 
             _directoryService.Copy(projectAbsSrcDir, projectAbsDestDir, excludePatterns: new string[] { "^bin$", "^obj$" });
@@ -48,7 +49,7 @@ namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
             Console.SetOut(tssw);
 
             // Act
-            int? result = runner.Run(projectAbsFilePath, entryAssemblyName, entryClassName, stubArgs);
+            int? result = runner.Run(projectAbsFilePath, entryAssemblyName, entryClassName, entryMethodName, stubArgs);
 
             // Assert
             Assert.Equal(0, result);

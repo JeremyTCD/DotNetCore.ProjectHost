@@ -120,8 +120,8 @@
   <data name="Exception_AssemblyDoesNotHaveClass" xml:space="preserve">
     <value>Assembly "{0}" does not have a class named "{1}"</value>
   </data>
-  <data name="Exception_ClassDoesNotHaveMainMethod" xml:space="preserve">
-    <value>Class "{0}" in Assembly "{1}" does not contain a Main method (entry point)</value>
+  <data name="Exception_ClassDoesNotHaveEntryMethod" xml:space="preserve">
+    <value>Class "{0}" in Assembly "{1}" does not contain a method with name "{2}"</value>
   </data>
   <data name="Log_LoadingAssembly" xml:space="preserve">
     <value>Loading assembly "{0}" into an AssemblyLoadContext that resolves from directory "{1}"</value>
@@ -129,8 +129,8 @@
   <data name="Log_PublishingProject" xml:space="preserve">
     <value>Publishing "{0}" build of project "{1}" to directory "{2}"</value>
   </data>
-  <data name="Log_RunningMainMethod" xml:space="preserve">
-    <value>Running Main method from class "{0}" of assembly "{1}" with args "{2}"</value>
+  <data name="Log_RunningEntryMethod" xml:space="preserve">
+    <value>Running entry method "{0}"  from class "{1}" of assembly "{2}" with args "{3}"</value>
   </data>
   <data name="Log_RunningProject" xml:space="preserve">
     <value>Running project "{0}" with arguments "{1}"</value>

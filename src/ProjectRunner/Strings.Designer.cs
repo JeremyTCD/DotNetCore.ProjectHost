@@ -20,7 +20,7 @@ namespace JeremyTCD.ProjectRunner {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -71,11 +71,11 @@ namespace JeremyTCD.ProjectRunner {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Class &quot;{0}&quot; in Assembly &quot;{1}&quot; does not contain a Main method (entry point).
+        ///   Looks up a localized string similar to Class &quot;{0}&quot; in Assembly &quot;{1}&quot; does not contain a method with name &quot;{2}&quot;.
         /// </summary>
-        public static string Exception_ClassDoesNotHaveMainMethod {
+        public static string Exception_ClassDoesNotHaveEntryMethod {
             get {
-                return ResourceManager.GetString("Exception_ClassDoesNotHaveMainMethod", resourceCulture);
+                return ResourceManager.GetString("Exception_ClassDoesNotHaveEntryMethod", resourceCulture);
             }
         }
         
@@ -98,11 +98,11 @@ namespace JeremyTCD.ProjectRunner {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Running Main method from class &quot;{0}&quot; of assembly &quot;{1}&quot; with args &quot;{2}&quot;.
+        ///   Looks up a localized string similar to Running entry method &quot;{0}&quot;  from class &quot;{1}&quot; of assembly &quot;{2}&quot; with args &quot;{3}&quot;.
         /// </summary>
-        public static string Log_RunningMainMethod {
+        public static string Log_RunningEntryMethod {
             get {
-                return ResourceManager.GetString("Log_RunningMainMethod", resourceCulture);
+                return ResourceManager.GetString("Log_RunningEntryMethod", resourceCulture);
             }
         }
         
