@@ -49,7 +49,7 @@ namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
             Console.SetOut(tssw);
 
             // Act
-            int? result = runner.Run(projectAbsFilePath, entryAssemblyName, entryClassName, entryMethodName, stubArgs);
+            int result = runner.Run(projectAbsFilePath, entryAssemblyName, entryClassName, entryMethodName, args: stubArgs);
 
             // Assert
             Assert.Equal(0, result);

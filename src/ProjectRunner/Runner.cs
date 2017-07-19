@@ -41,7 +41,7 @@ namespace JeremyTCD.ProjectRunner
         /// <returns>
         /// Integer return value of entry method or null if entry method returns void
         /// </returns>
-        public virtual int Run(string projFile, string entryAssemblyName, string entryClassName, string entryMethodName = "Main", string[] args = null)
+        public virtual int Run(string projFile, string entryAssemblyName, string entryClassName, string entryMethodName = "Main", string publishConfiguration = "Release", string[] args = null)
         {
             if (_loggingService.IsEnabled(LogLevel.Information))
             {
@@ -52,10 +52,10 @@ namespace JeremyTCD.ProjectRunner
 
             // Publish project
             // TODO already published case
-            PublishProject(absProjFilePath);
+            PublishProject(absProjFilePath, publishConfiguration);
 
             // Load entry assembly
-            Assembly entryAssembly = LoadEntryAssembly(absProjFilePath, entryAssemblyName);
+            Assembly entryAssembly = LoadEntryAssembly(absProjFilePath, entryAssemblyName, publishConfiguration);
 
             // Run entry method
             int? result = RunEntryMethod(entryAssembly, entryClassName, entryMethodName, args) as int?;
@@ -64,19 +64,19 @@ namespace JeremyTCD.ProjectRunner
         }
 
         // TODO should be internal or private but testable in isolation
-        public void PublishProject(string absProjFilePath)
+        public void PublishProject(string absProjFilePath, string publishConfiguration)
         {
             _loggingService.LogDebug(Strings.Log_PublishingProject, absProjFilePath);
 
-            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:configuration=release");
+            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:configuration={publishConfiguration}");
         }
 
         // TODO should be internal or private but testable in isolation
-        public Assembly LoadEntryAssembly(string absProjFilePath, string entryAssemblyName)
+        public Assembly LoadEntryAssembly(string absProjFilePath, string entryAssemblyName, string publishConfiguration)
         {
             string projFileDirectory = _directoryService.GetParent(absProjFilePath).FullName;
             string targetFramework = _msBuildService.GetTargetFrameworks(absProjFilePath).First();
-            string publishDirectory = $"{projFileDirectory}/bin/release/{targetFramework}/publish";
+            string publishDirectory = $"{projFileDirectory}/bin/{publishConfiguration}/{targetFramework}/publish";
             string entryAssemblyFilePath = $"{publishDirectory}/{entryAssemblyName}.dll";
 
             _loggingService.LogDebug(Strings.Log_LoadingAssembly, entryAssemblyFilePath, publishDirectory);
