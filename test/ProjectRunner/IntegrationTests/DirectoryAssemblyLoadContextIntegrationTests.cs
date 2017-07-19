@@ -14,10 +14,9 @@ namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
             // Arrange
             string solutionDir = Path.GetFullPath(typeof(DirectoryAssemblyLoadContextIntegrationTests).GetTypeInfo().Assembly.Location + "../../../../../../..");
             string projectDir = "StubProject.Referencer";
-            string projectName = projectDir;
-            string rootDirectory = $"{solutionDir}/test/{projectDir}/bin/debug/netstandard1.3/";
+            string publishDir = $"{solutionDir}/test/{projectDir}/bin/debug/netstandard1.3/publish";
 
-            DirectoryAssemblyLoadContext dalc = new DirectoryAssemblyLoadContext(rootDirectory);
+            DirectoryAssemblyLoadContext dalc = new DirectoryAssemblyLoadContext(publishDir);
 
             // Act
             Assembly referencer = dalc.LoadFromAssemblyName(new AssemblyName("StubProject.Referencer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"));

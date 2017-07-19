@@ -24,33 +24,27 @@ namespace JeremyTCD.ProjectRunner
                 AssemblyName name = GetAssemblyName(assemblyFile);
                 _assemblyFiles.Add(name.Name, assemblyFile);
             }
-            Resolving += DirectoryResolver;
-        }
-
-        private Assembly DirectoryResolver(AssemblyLoadContext loadContext, AssemblyName name)
-        {
-            // Ignore resources dlls
-            if (name.Name.EndsWith(".resources", StringComparison.OrdinalIgnoreCase))
-            {
-                return null;
-            }
-
-            string assemblyFile = _assemblyFiles[name.Name];
-            try
-            {
-                return loadContext.LoadFromAssemblyPath(assemblyFile);
-            }
-            catch
-            {
-                // Swallow exceptions so other Resolving subscribers can have a go
-                return null;
-            }
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            // Attempt to copy assembly from default ALC if it has already been loaded
-            return null;
+            // Ignore resources dlls
+            if (assemblyName.Name.EndsWith(".resources", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            try
+            {
+                string assemblyFile = _assemblyFiles[assemblyName.Name];
+
+                return LoadFromAssemblyPath(assemblyFile);
+            }
+            catch 
+            {
+                // Let default context have a go
+                return null;
+            }
         }
     }
 }
