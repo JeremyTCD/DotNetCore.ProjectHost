@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -11,28 +12,30 @@ namespace JeremyTCD.ProjectRunner
     public class DirectoryAssemblyLoadContext : AssemblyLoadContext
     {
         private string _directory { get; }
-        private Dictionary<string, string> _assemblyFiles { get; } = new Dictionary<string, string>();
+        private Dictionary<string, string> _assemblyFiles { get; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public DirectoryAssemblyLoadContext(string directory)
         {
             _directory = directory;
-            string[] assemblyFiles = Directory.GetFiles(directory, "*.dll", SearchOption.AllDirectories);
+            // TODO how to handle runtime specific dlls?
+            string[] assemblyFiles = Directory.GetFiles(directory, "*.dll", SearchOption.TopDirectoryOnly);
             foreach (string assemblyFile in assemblyFiles)
             {
                 AssemblyName name = GetAssemblyName(assemblyFile);
-                _assemblyFiles.Add(name.FullName, assemblyFile);
+                _assemblyFiles.Add(name.Name, assemblyFile);
             }
             Resolving += DirectoryResolver;
         }
 
         private Assembly DirectoryResolver(AssemblyLoadContext loadContext, AssemblyName name)
         {
-            string assemblyFile = _assemblyFiles[name.FullName];
             // Ignore resources dlls
             if (name.Name.EndsWith(".resources", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
+
+            string assemblyFile = _assemblyFiles[name.Name];
             try
             {
                 return loadContext.LoadFromAssemblyPath(assemblyFile);
@@ -42,7 +45,6 @@ namespace JeremyTCD.ProjectRunner
                 // Swallow exceptions so other Resolving subscribers can have a go
                 return null;
             }
-
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
