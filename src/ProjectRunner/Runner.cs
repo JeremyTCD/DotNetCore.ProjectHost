@@ -66,10 +66,7 @@ namespace JeremyTCD.ProjectRunner
         // TODO should be internal or private but testable in isolation
         public void PublishProject(string absProjFilePath)
         {
-            // Only need to build for 1 framework
-            string targetFramework = _msBuildService.GetTargetFrameworks(absProjFilePath).First();
-
-            _loggingService.LogDebug(Strings.Log_PublishingProject, targetFramework, absProjFilePath);
+            _loggingService.LogDebug(Strings.Log_PublishingProject, absProjFilePath);
 
             _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:configuration=release");
         }

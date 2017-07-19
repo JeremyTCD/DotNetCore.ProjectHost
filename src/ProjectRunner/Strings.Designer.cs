@@ -89,7 +89,7 @@ namespace JeremyTCD.ProjectRunner {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Publishing &quot;{0}&quot; build of project &quot;{1}&quot; to directory &quot;{2}&quot;.
+        ///   Looks up a localized string similar to Publishing project &quot;{0}&quot;.
         /// </summary>
         public static string Log_PublishingProject {
             get {
