@@ -28,6 +28,11 @@ namespace JeremyTCD.ProjectRunner
         private Assembly DirectoryResolver(AssemblyLoadContext loadContext, AssemblyName name)
         {
             string assemblyFile = _assemblyFiles[name.FullName];
+            // Ignore resources dlls
+            if (name.Name.EndsWith(".resources", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
             try
             {
                 return loadContext.LoadFromAssemblyPath(assemblyFile);
