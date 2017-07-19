@@ -12,10 +12,10 @@ namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
         public void DirectoryAssemblyLoadContext_ResolvesImplicitAndExplicitLoads()
         {
             // Arrange
-            string solutionDir = Path.GetFullPath(typeof(DirectoryAssemblyLoadContextIntegrationTests).GetTypeInfo().Assembly.Location + "../../../../../../../");
+            string solutionDir = Path.GetFullPath(typeof(DirectoryAssemblyLoadContextIntegrationTests).GetTypeInfo().Assembly.Location + "../../../../../../..");
             string projectDir = "StubProject.Referencer";
             string projectName = projectDir;
-            string rootDirectory = $"{solutionDir}test/{projectDir}/bin/artifacts";
+            string rootDirectory = $"{solutionDir}/test/{projectDir}/bin/debug/netstandard1.3/";
 
             DirectoryAssemblyLoadContext dalc = new DirectoryAssemblyLoadContext(rootDirectory);
 
