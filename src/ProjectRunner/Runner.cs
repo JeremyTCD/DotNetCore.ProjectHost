@@ -41,7 +41,7 @@ namespace JeremyTCD.ProjectRunner
         /// <returns>
         /// Integer return value of entry method or null if entry method returns void
         /// </returns>
-        public virtual int? Run(string projFile, string entryAssemblyName, string entryClassName, string entryMethodName = "Main", string[] args = null)
+        public virtual int Run(string projFile, string entryAssemblyName, string entryClassName, string entryMethodName = "Main", string[] args = null)
         {
             if (_loggingService.IsEnabled(LogLevel.Information))
             {
@@ -61,9 +61,9 @@ namespace JeremyTCD.ProjectRunner
             Assembly entryAssembly = LoadEntryAssembly(outDir, entryAssemblyFilePath);
 
             // Run entry method
-            object result = RunEntryMethod(entryAssembly, entryClassName, entryMethodName, args);
+            int? result = RunEntryMethod(entryAssembly, entryClassName, entryMethodName, args) as int?;
 
-            return result as int?;
+            return result ?? 0;
         }
 
         // TODO should be internal or private but testable in isolation
