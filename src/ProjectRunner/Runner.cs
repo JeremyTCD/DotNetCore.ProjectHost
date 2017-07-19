@@ -48,17 +48,14 @@ namespace JeremyTCD.ProjectRunner
                 _loggingService.LogInformation(Strings.Log_RunningProject, projFile, String.Join(",", args));
             }
 
-            // TODO if already built (plugin folder etc) just need outDir, proj file not relevant
             string absProjFilePath = _pathService.GetAbsolutePath(projFile);
-            string directory = _directoryService.GetParent(absProjFilePath).FullName;
-            string outDir = $"{directory}/bin/publish";
-            string entryAssemblyFilePath = $"{outDir}/{entryAssemblyName}.dll";
 
             // Publish project
-            PublishProject(absProjFilePath, outDir);
+            // TODO already published case
+            PublishProject(absProjFilePath);
 
             // Load entry assembly
-            Assembly entryAssembly = LoadEntryAssembly(outDir, entryAssemblyFilePath);
+            Assembly entryAssembly = LoadEntryAssembly(absProjFilePath, entryAssemblyName);
 
             // Run entry method
             int? result = RunEntryMethod(entryAssembly, entryClassName, entryMethodName, args) as int?;
@@ -67,22 +64,27 @@ namespace JeremyTCD.ProjectRunner
         }
 
         // TODO should be internal or private but testable in isolation
-        public void PublishProject(string absProjFilePath, string outDir)
+        public void PublishProject(string absProjFilePath)
         {
             // Only need to build for 1 framework
             string targetFramework = _msBuildService.GetTargetFrameworks(absProjFilePath).First();
 
-            _loggingService.LogDebug(Strings.Log_PublishingProject, targetFramework, absProjFilePath, outDir);
+            _loggingService.LogDebug(Strings.Log_PublishingProject, targetFramework, absProjFilePath);
 
-            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:outdir={outDir},configuration=release");
+            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:configuration=release");
         }
 
         // TODO should be internal or private but testable in isolation
-        public Assembly LoadEntryAssembly(string outDir, string entryAssemblyFilePath)
+        public Assembly LoadEntryAssembly(string absProjFilePath, string entryAssemblyName)
         {
-            _loggingService.LogDebug(Strings.Log_LoadingAssembly, entryAssemblyFilePath, outDir);
+            string projFileDirectory = _directoryService.GetParent(absProjFilePath).FullName;
+            string targetFramework = _msBuildService.GetTargetFrameworks(absProjFilePath).First();
+            string publishDirectory = $"{projFileDirectory}/bin/release/{targetFramework}/publish";
+            string entryAssemblyFilePath = $"{publishDirectory}/{entryAssemblyName}.dll";
 
-            AssemblyLoadContext alc = _assemblyLoadContextFactory.CreateAssemblyLoadContext(outDir);
+            _loggingService.LogDebug(Strings.Log_LoadingAssembly, entryAssemblyFilePath, publishDirectory);
+
+            AssemblyLoadContext alc = _assemblyLoadContextFactory.CreateAssemblyLoadContext(publishDirectory);
 
             return alc.LoadFromAssemblyPath(entryAssemblyFilePath);
         }
