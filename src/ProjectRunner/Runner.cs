@@ -1,4 +1,5 @@
 ﻿using JeremyTCD.DotNetCore.Utils;
+using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -49,13 +50,20 @@ namespace JeremyTCD.ProjectRunner
             }
 
             string absProjFilePath = _pathService.GetAbsolutePath(projFile);
+            string rid = RuntimeEnvironment.GetRuntimeIdentifier();
+            string projFileDirectory = _directoryService.GetParent(absProjFilePath).FullName;
+            string targetFramework = _msBuildService.GetTargetFrameworks(absProjFilePath).First();
+            string publishDirectory = $"{projFileDirectory}/bin/{publishConfiguration}/{targetFramework}/{rid}";
 
-            // Publish project
+            // Delete publish directory - IncrementalClean target is buggy and deletes required assemblies if directory isn't empty - https://github.com/Microsoft/msbuild/issues/1054
+            _directoryService.Delete(publishDirectory, true);
+
+            // Build project
             // TODO already published case
-            PublishProject(absProjFilePath, publishConfiguration);
+            BuildProject(absProjFilePath, publishConfiguration, rid);
 
             // Load entry assembly
-            Assembly entryAssembly = LoadEntryAssembly(absProjFilePath, entryAssemblyName, publishConfiguration);
+            Assembly entryAssembly = LoadEntryAssembly(publishDirectory, entryAssemblyName);
 
             // Run entry method
             int? result = RunEntryMethod(entryAssembly, entryClassName, entryMethodName, args) as int?;
@@ -64,19 +72,19 @@ namespace JeremyTCD.ProjectRunner
         }
 
         // TODO should be internal or private but testable in isolation
-        public void PublishProject(string absProjFilePath, string publishConfiguration)
+        public void BuildProject(string absProjFilePath, string publishConfiguration, string rid)
         {
-            _loggingService.LogDebug(Strings.Log_PublishingProject, absProjFilePath);
+            _loggingService.LogDebug(Strings.Log_BuildingProject, absProjFilePath);
 
-            _msBuildService.Build(absProjFilePath, $"/t:restore,publish /p:configuration={publishConfiguration}");
+            // TODO runtime identifier should depend on environment
+            _msBuildService.
+                Build(absProjFilePath, $"/t:Restore,Build /p:Configuration={publishConfiguration},RuntimeIdentifier={rid},CopyLocalLockFileAssemblies=true");
         }
-
+         
         // TODO should be internal or private but testable in isolation
-        public Assembly LoadEntryAssembly(string absProjFilePath, string entryAssemblyName, string publishConfiguration)
+        public Assembly LoadEntryAssembly(string publishDirectory, string entryAssemblyName)
         {
-            string projFileDirectory = _directoryService.GetParent(absProjFilePath).FullName;
-            string targetFramework = _msBuildService.GetTargetFrameworks(absProjFilePath).First();
-            string publishDirectory = $"{projFileDirectory}/bin/{publishConfiguration}/{targetFramework}/publish";
+
             string entryAssemblyFilePath = $"{publishDirectory}/{entryAssemblyName}.dll";
 
             _loggingService.LogDebug(Strings.Log_LoadingAssembly, entryAssemblyFilePath, publishDirectory);

@@ -80,20 +80,20 @@ namespace JeremyTCD.ProjectRunner {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Building project &quot;{0}&quot;.
+        /// </summary>
+        public static string Log_BuildingProject {
+            get {
+                return ResourceManager.GetString("Log_BuildingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading assembly &quot;{0}&quot; into an AssemblyLoadContext that resolves from directory &quot;{1}&quot;.
         /// </summary>
         public static string Log_LoadingAssembly {
             get {
                 return ResourceManager.GetString("Log_LoadingAssembly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Publishing project &quot;{0}&quot;.
-        /// </summary>
-        public static string Log_PublishingProject {
-            get {
-                return ResourceManager.GetString("Log_PublishingProject", resourceCulture);
             }
         }
         
