@@ -21,8 +21,8 @@ namespace JeremyTCD.ProjectRunner
             string[] assemblyFiles = Directory.GetFiles(directory, "*.dll", SearchOption.TopDirectoryOnly);
             foreach (string assemblyFile in assemblyFiles)
             {
-                AssemblyName name = GetAssemblyName(assemblyFile);
-                _assemblyFiles.Add(name.Name, assemblyFile);
+                string name = Path.GetFileNameWithoutExtension(assemblyFile);
+                _assemblyFiles.Add(name, assemblyFile);
             }
         }
 
@@ -34,16 +34,40 @@ namespace JeremyTCD.ProjectRunner
                 return null;
             }
 
+            // Use framework assemblies from default context
+            // TODO what if simple name does not match assembly file name? revert to GetAssemblyName in constructor? 
+            // need some equivalent for unmanageddlls
+            if (!_assemblyFiles.TryGetValue(assemblyName.Name, out string assemblyFile))
+            {
+                return null;
+            }
+
             try
             {
-                string assemblyFile = _assemblyFiles[assemblyName.Name];
-
                 return LoadFromAssemblyPath(assemblyFile);
             }
-            catch 
+            catch
             {
                 // Let default context have a go
                 return null;
+            }
+        }
+
+        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
+        {
+            if(!_assemblyFiles.TryGetValue(unmanagedDllName, out string assemblyFile))
+            {
+                return IntPtr.Zero;
+            }
+
+            try
+            {
+                return LoadUnmanagedDllFromPath(assemblyFile);
+            }
+            catch
+            {
+                // Let default context have a go
+                return IntPtr.Zero;
             }
         }
     }
