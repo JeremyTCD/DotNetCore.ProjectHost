@@ -56,7 +56,7 @@ namespace JeremyTCD.ProjectRunner
             string publishDirectory = $"{projFileDirectory}/bin/{publishConfiguration}/{targetFramework}/{rid}";
 
             // Delete publish directory - IncrementalClean target is buggy and deletes required assemblies if directory isn't empty - https://github.com/Microsoft/msbuild/issues/1054
-            _directoryService.Delete(publishDirectory, true);
+            _directoryService.DeleteIfExists(publishDirectory, true);
 
             // Build project
             // TODO already published case
