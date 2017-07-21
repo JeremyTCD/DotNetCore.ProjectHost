@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using StructureMap;
 
-namespace JeremyTCD.ProjectRunner
+namespace JeremyTCD.DotNetCore.ProjectRunner
 {
     public class ProjectRunnerRegistry : Registry
     {

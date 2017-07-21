@@ -6,7 +6,7 @@ using System.IO;
 using System.Reflection;
 using Xunit;
 
-namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
+namespace JeremyTCD.DotNetCore.ProjectRunner.Tests.IntegrationTests
 {
     public class RunnerIntegrationTests
     {

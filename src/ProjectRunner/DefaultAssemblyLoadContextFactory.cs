@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Loader;
 
-namespace JeremyTCD.ProjectRunner
+namespace JeremyTCD.DotNetCore.ProjectRunner
 {
     public class DefaultAssemblyLoadContextFactory : IAssemblyLoadContextFactory
     {

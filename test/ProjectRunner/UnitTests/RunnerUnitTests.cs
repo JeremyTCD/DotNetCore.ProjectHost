@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using Xunit;
 
-namespace JeremyTCD.ProjectRunner.Tests.UnitTests
+namespace JeremyTCD.DotNetCore.ProjectRunner.Tests.UnitTests
 {
     public class RunnerUnitTests
     {

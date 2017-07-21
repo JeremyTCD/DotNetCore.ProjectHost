@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace JeremyTCD.ProjectRunner
+namespace JeremyTCD.DotNetCore.ProjectRunner
 {
     /// <summary>
     /// Resolves assemblies from specified directory.
