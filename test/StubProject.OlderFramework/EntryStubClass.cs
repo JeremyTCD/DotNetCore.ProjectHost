@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace StubProject.EntryPoint
+namespace StubProject.OlderFramework
 {
-    public class EntryPointStubClass
+    public class EntryStubClass
     {
         public static int Main(string[] args)
         {
