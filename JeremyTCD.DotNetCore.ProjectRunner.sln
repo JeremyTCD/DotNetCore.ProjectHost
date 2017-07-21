@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26711.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.ProjectRunner", "src\ProjectRunner\JeremyTCD.ProjectRunner.csproj", "{57680205-C123-4751-A942-CFE3B898BF13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.DotNetCore.ProjectRunner", "src\ProjectRunner\JeremyTCD.DotNetCore.ProjectRunner.csproj", "{57680205-C123-4751-A942-CFE3B898BF13}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3967C76E-CDAA-44C6-9112-4BF6ED671E77}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{81A6273C-34C7-4316-B39E-B4ED960EA2EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.ProjectRunner.Tests", "test\ProjectRunner\JeremyTCD.ProjectRunner.Tests.csproj", "{DD95B409-4DB0-4C68-ABC5-B01203554DA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.DotNetCore.ProjectRunner.Tests", "test\ProjectRunner\JeremyTCD.DotNetCore.ProjectRunner.Tests.csproj", "{DD95B409-4DB0-4C68-ABC5-B01203554DA6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.DotNetCore.Utils", "..\JeremyTCD.DotNetCore.Utils\src\JeremyTCD.DotNetCore.Utils\JeremyTCD.DotNetCore.Utils.csproj", "{3B068C80-B4A4-4CC2-B556-C5B0E31CDC4B}"
 EndProject
@@ -67,5 +67,8 @@ Global
 		{749F9088-9601-48B4-B6FD-A6FE974BCFAD} = {81A6273C-34C7-4316-B39E-B4ED960EA2EA}
 		{94C35DEA-B7F2-40C9-BAF4-53885302F50C} = {81A6273C-34C7-4316-B39E-B4ED960EA2EA}
 		{1161D622-DBE7-40B9-B8D1-A5BC75D1D059} = {81A6273C-34C7-4316-B39E-B4ED960EA2EA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CA40AB1B-04B1-46D1-9EF0-74B80705EB08}
 	EndGlobalSection
 EndGlobal
