@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
@@ -17,12 +18,32 @@ namespace JeremyTCD.DotNetCore.ProjectRunner
         public DirectoryAssemblyLoadContext(string directory)
         {
             _directory = directory;
-            // TODO how to handle runtime specific dlls?
-            string[] assemblyFiles = Directory.GetFiles(directory, "*.dll", SearchOption.TopDirectoryOnly);
-            foreach (string assemblyFile in assemblyFiles)
+            IEnumerable<string> files = Directory.
+                GetFiles(directory, "*.dll", SearchOption.TopDirectoryOnly);
+
+            // Always prefer native images - https://github.com/dotnet/coreclr/blob/40b25c8955a00e47d2b061f2f795ffc917ccca1a/Documentation/building/crossgen.md
+            IEnumerable<string> filesWithNativeImages = files.
+                Where(f => f.EndsWith(".ni.dll")).
+                Select(f => f.Replace(".ni", ""));
+
+            foreach (string file in files)
             {
-                string name = Path.GetFileNameWithoutExtension(assemblyFile);
-                _assemblyFiles.Add(name, assemblyFile);
+                if (filesWithNativeImages.Contains(file))
+                {
+                    continue;
+                }
+
+                string name;
+                try
+                {
+                    name = GetAssemblyName(file).Name; // Assemblies name isn't necessarily the same as its file name
+                }
+                catch (BadImageFormatException)
+                {
+                    name = Path.GetFileNameWithoutExtension(file);
+                }
+
+                _assemblyFiles.Add(name, file);
             }
         }
 
@@ -34,12 +55,10 @@ namespace JeremyTCD.DotNetCore.ProjectRunner
                 return null;
             }
 
-            // Use framework assemblies from default context
-            // TODO what if simple name does not match assembly file name? revert to GetAssemblyName in constructor? 
-            // need some equivalent for unmanageddlls
             if (!_assemblyFiles.TryGetValue(assemblyName.Name, out string assemblyFile))
             {
-                return null;
+                // Let default context have a go
+                return null; 
             }
 
             try
@@ -49,7 +68,7 @@ namespace JeremyTCD.DotNetCore.ProjectRunner
             catch
             {
                 // Let default context have a go
-                return null;
+                return null; 
             }
         }
 
