@@ -20,7 +20,7 @@ namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
 
             Mock<ILoggingService<DirectoryService>> mockDSLS = _mockRepository.Create<ILoggingService<DirectoryService>>();
             _directoryService = new DirectoryService(mockDSLS.Object);
-            _directoryService.Delete(_tempDir, true);
+            _directoryService.DeleteIfExists(_tempDir, true);
             _directoryService.Create(_tempDir);
             _directoryService.SetCurrentDirectory(_tempDir);
         }
@@ -37,25 +37,19 @@ namespace JeremyTCD.ProjectRunner.Tests.IntegrationTests
             string projectAbsFilePath = $"{_tempDir}/{projectDir}/{projectName}.csproj";
             string entryAssemblyName = projectName;
             string entryClassName = $"{projectName}.EntryPointStubClass";
-            string entryMethodName = "Main";
-            string[] stubArgs = new string[] { "test", "args" };
+            int testExitCode = 10; // Arbitrary 
+            string[] stubArgs = new string[] { testExitCode.ToString() };
 
             _directoryService.Copy(projectAbsSrcDir, projectAbsDestDir, excludePatterns: new string[] { "^bin$", "^obj$" });
 
             IContainer container = new Container(new ProjectRunnerRegistry());
             Runner runner = container.GetInstance<Runner>();
 
-            ThreadSpecificStringWriter tssw = new ThreadSpecificStringWriter();
-            Console.SetOut(tssw);
-
             // Act
-            int result = runner.Run(projectAbsFilePath, entryAssemblyName, entryClassName, entryMethodName, args: stubArgs);
+            int result = runner.Run(projectAbsFilePath, entryAssemblyName, entryClassName, publishConfiguration: "Debug", args: stubArgs);
 
             // Assert
-            Assert.Equal(0, result);
-            tssw.Dispose();
-            string output = tssw.ToString();
-            Assert.Equal(string.Join(",", stubArgs), output);
+            Assert.Equal(testExitCode, result);
         }
     }
 }

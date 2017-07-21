@@ -6,9 +6,7 @@ namespace StubProject.EntryPoint
     {
         public static int Main(string[] args)
         {
-            Console.Write($"{string.Join(",", args)}");
-
-            return 0;
+            return Convert.ToInt32(args[0]); // Arbitrary number to verify that Main executed successfully
         }
     }
 }
