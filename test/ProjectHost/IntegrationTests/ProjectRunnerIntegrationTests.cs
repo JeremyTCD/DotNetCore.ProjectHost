@@ -6,15 +6,15 @@ using System.IO;
 using System.Reflection;
 using Xunit;
 
-namespace JeremyTCD.DotNetCore.ProjectRunner.Tests.IntegrationTests
+namespace JeremyTCD.DotNetCore.ProjectHost.Tests.IntegrationTests
 {
-    public class RunnerIntegrationTests
+    public class ProjectRunnerIntegrationTests
     {
         private MockRepository _mockRepository { get; }
-        private string _tempDir { get; } = Path.Combine(Path.GetTempPath(), $"{nameof(RunnerIntegrationTests)}Temp");
+        private string _tempDir { get; } = Path.Combine(Path.GetTempPath(), $"{nameof(ProjectRunnerIntegrationTests)}Temp");
         private DirectoryService _directoryService { get; }
 
-        public RunnerIntegrationTests()
+        public ProjectRunnerIntegrationTests()
         {
             _mockRepository = new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
 
@@ -31,7 +31,7 @@ namespace JeremyTCD.DotNetCore.ProjectRunner.Tests.IntegrationTests
             _directoryService.DeleteIfExists(tempDir, true);
             _directoryService.Create(tempDir);
             _directoryService.SetCurrentDirectory(tempDir);
-            string solutionDir = Path.GetFullPath(typeof(RunnerIntegrationTests).GetTypeInfo().Assembly.Location + "../../../../../../../");
+            string solutionDir = Path.GetFullPath(typeof(ProjectRunnerIntegrationTests).GetTypeInfo().Assembly.Location + "../../../../../../../");
             string projectName = projectDir;
             string projectAbsSrcDir = $"{solutionDir}test/{projectDir}";
             string projectAbsDestDir = $"{tempDir}/{projectDir}";
@@ -43,8 +43,8 @@ namespace JeremyTCD.DotNetCore.ProjectRunner.Tests.IntegrationTests
 
             _directoryService.Copy(projectAbsSrcDir, projectAbsDestDir, excludePatterns: new string[] { "^bin$", "^obj$" });
 
-            IContainer container = new Container(new ProjectRunnerRegistry());
-            Runner runner = container.GetInstance<Runner>();
+            IContainer container = new Container(new ProjectHostRegistry());
+            ProjectRunner runner = container.GetInstance<ProjectRunner>();
 
             // Act
             int result = runner.Run(projectAbsFilePath, entryAssemblyName, entryClassName, publishConfiguration: "Debug", args: stubArgs);

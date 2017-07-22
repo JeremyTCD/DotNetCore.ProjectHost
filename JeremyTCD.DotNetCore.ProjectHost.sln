@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26711.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.DotNetCore.ProjectRunner", "src\ProjectRunner\JeremyTCD.DotNetCore.ProjectRunner.csproj", "{57680205-C123-4751-A942-CFE3B898BF13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.DotNetCore.ProjectHost", "src\ProjectHost\JeremyTCD.DotNetCore.ProjectHost.csproj", "{57680205-C123-4751-A942-CFE3B898BF13}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3967C76E-CDAA-44C6-9112-4BF6ED671E77}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{81A6273C-34C7-4316-B39E-B4ED960EA2EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.DotNetCore.ProjectRunner.Tests", "test\ProjectRunner\JeremyTCD.DotNetCore.ProjectRunner.Tests.csproj", "{DD95B409-4DB0-4C68-ABC5-B01203554DA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.DotNetCore.ProjectHost.Tests", "test\ProjectHost\JeremyTCD.DotNetCore.ProjectHost.Tests.csproj", "{DD95B409-4DB0-4C68-ABC5-B01203554DA6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JeremyTCD.DotNetCore.Utils", "..\JeremyTCD.DotNetCore.Utils\src\JeremyTCD.DotNetCore.Utils\JeremyTCD.DotNetCore.Utils.csproj", "{3B068C80-B4A4-4CC2-B556-C5B0E31CDC4B}"
 EndProject
@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StubProject.Referencer", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StubProject.Referencee", "test\StubProject.Referencee\StubProject.Referencee.csproj", "{1161D622-DBE7-40B9-B8D1-A5BC75D1D059}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StubProject.OlderFramework", "test\StubProject.OlderFramework\StubProject.OlderFramework.csproj", "{A25EA571-C4DC-4AD1-B794-9DAA58AFC0FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StubProject.OlderFramework", "test\StubProject.OlderFramework\StubProject.OlderFramework.csproj", "{A25EA571-C4DC-4AD1-B794-9DAA58AFC0FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

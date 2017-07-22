@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace JeremyTCD.DotNetCore.ProjectRunner
+namespace JeremyTCD.DotNetCore.ProjectHost
 {
     /// <summary>
     /// Resolves assemblies from specified directory.

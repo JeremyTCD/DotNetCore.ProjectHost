@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
-namespace JeremyTCD.DotNetCore.ProjectRunner.Tests.IntegrationTests
+namespace JeremyTCD.DotNetCore.ProjectHost.Tests.IntegrationTests
 {
     public class DirectoryAssemblyLoadContextIntegrationTests
     {

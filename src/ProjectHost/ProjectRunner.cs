@@ -6,11 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace JeremyTCD.DotNetCore.ProjectRunner
+namespace JeremyTCD.DotNetCore.ProjectHost
 {
-    public class Runner
+    public class ProjectRunner
     {
-        private ILoggingService<Runner> _loggingService { get; }
+        private ILoggingService<ProjectRunner> _loggingService { get; }
         private IPathService _pathService { get; }
         private IMSBuildService _msBuildService { get; }
         private IDirectoryService _directoryService { get; }
@@ -18,7 +18,7 @@ namespace JeremyTCD.DotNetCore.ProjectRunner
         private IActivatorService _activatorService { get; }
         private ITypeService _typeService { get; }
 
-        public Runner(ILoggingService<Runner> loggingService, IPathService pathService, IMSBuildService msbuildService, IActivatorService activatorService,
+        public ProjectRunner(ILoggingService<ProjectRunner> loggingService, IPathService pathService, IMSBuildService msbuildService, IActivatorService activatorService,
             IDirectoryService directoryService, ITypeService typeService, IAssemblyLoadContextFactory assemblyLoadContextFactory)
         {
             _activatorService = activatorService;

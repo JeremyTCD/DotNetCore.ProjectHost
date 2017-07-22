@@ -2,11 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using StructureMap;
 
-namespace JeremyTCD.DotNetCore.ProjectRunner
+namespace JeremyTCD.DotNetCore.ProjectHost
 {
-    public class ProjectRunnerRegistry : Registry
+    public class ProjectHostRegistry : Registry
     {
-        public ProjectRunnerRegistry()
+        public ProjectHostRegistry()
         {
             IServiceCollection services = new ServiceCollection();
             services.
@@ -21,7 +21,7 @@ namespace JeremyTCD.DotNetCore.ProjectRunner
             For<IProcessService>().Singleton().Use<ProcessService>();
             For<ITypeService>().Singleton().Use<TypeService>();
 
-            For<Runner>().Singleton().Use<Runner>();
+            For<ProjectRunner>().Singleton().Use<ProjectRunner>();
             For<IAssemblyLoadContextFactory>().Singleton().Use<DefaultAssemblyLoadContextFactory>();
         }
     }

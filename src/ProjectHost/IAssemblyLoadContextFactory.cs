@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Loader;
 
-namespace JeremyTCD.DotNetCore.ProjectRunner
+namespace JeremyTCD.DotNetCore.ProjectHost
 {
     public interface IAssemblyLoadContextFactory
     {

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
+    <AssemblyName>JeremyTCD.DotNetCore.ProjectHost</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

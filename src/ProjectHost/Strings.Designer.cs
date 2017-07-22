@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace JeremyTCD.DotNetCore.ProjectRunner {
+namespace JeremyTCD.DotNetCore.ProjectHost {
     using System;
     using System.Reflection;
     
@@ -40,7 +40,7 @@ namespace JeremyTCD.DotNetCore.ProjectRunner {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("JeremyTCD.DotNetCore.ProjectRunner.Strings", typeof(Strings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("JeremyTCD.DotNetCore.ProjectHost.Strings", typeof(Strings).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

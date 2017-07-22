@@ -1,4 +1,4 @@
-# Project Runner
+# Project Host
 ## Use Case
 Useful for when a class library is used as configuration for an application (typically a console application). In such cases, application logic that utilizes
 the configuration project should execute in an isolated `AssemblyLoadContext`. Project runner does just that.
