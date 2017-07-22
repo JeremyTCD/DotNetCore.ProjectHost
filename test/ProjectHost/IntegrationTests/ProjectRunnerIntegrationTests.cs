@@ -28,8 +28,7 @@ namespace JeremyTCD.DotNetCore.ProjectHost.Tests.IntegrationTests
         {
             // Arrange
             string tempDir = $"{_tempDir}.{projectDir}"; // TODO netstandard2.0 and earlier, AssemblyLoadContexts cannot be unloaded
-            _directoryService.DeleteIfExists(tempDir, true);
-            _directoryService.Create(tempDir);
+            _directoryService.Empty(tempDir);
             _directoryService.SetCurrentDirectory(tempDir);
             string solutionDir = Path.GetFullPath(typeof(ProjectRunnerIntegrationTests).GetTypeInfo().Assembly.Location + "../../../../../../../");
             string projectName = projectDir;
