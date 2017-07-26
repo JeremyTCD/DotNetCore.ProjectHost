@@ -1,6 +1,8 @@
 ﻿using JeremyTCD.DotNetCore.Utils;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using StructureMap;
+using System;
 using System.IO;
 using System.Reflection;
 using Xunit;
@@ -38,15 +40,17 @@ namespace JeremyTCD.DotNetCore.ProjectHost.Tests.IntegrationTests
             DirectoryAssemblyLoadContext dalc = new DirectoryAssemblyLoadContext(outputDir);
             Assembly assembly = dalc.LoadFromAssemblyPath(assemblyFilePath);
 
-            IContainer container = new Container(new ProjectHostRegistry());
-            MethodRunner runner = container.GetInstance<MethodRunner>();
-
+            IServiceCollection services = new ServiceCollection();
+            services.AddProjectHost();
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+            IMethodRunner runner = serviceProvider.GetService<IMethodRunner>();
+            
             // Act
             int result = runner.Run(assembly, entryClassName, args: stubArgs);
 
             // Assert
             Assert.Equal(testExitCode, result);
-            container.Dispose();
+            (serviceProvider as IDisposable).Dispose();
         }
     }
 }

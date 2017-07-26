@@ -1,6 +1,8 @@
 ﻿using JeremyTCD.DotNetCore.Utils;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using StructureMap;
+using System;
 using System.IO;
 using System.Reflection;
 using Xunit;
@@ -38,15 +40,17 @@ namespace JeremyTCD.DotNetCore.ProjectHost.Tests.IntegrationTests
 
             _directoryService.Copy(projectAbsSrcDir, _tempDir, excludePatterns: new string[] { "^bin$", "^obj$" });
 
-            IContainer container = new Container(new ProjectHostRegistry());
-            ProjectLoader loader = container.GetInstance<ProjectLoader>();
+            IServiceCollection services = new ServiceCollection();
+            services.AddProjectHost();
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+            IProjectLoader loader = serviceProvider.GetService<IProjectLoader>();
 
             // Act
             Assembly result = loader.Load(projectAbsFilePath, entryAssemblyName);
 
             // Assert
             Assert.Equal(entryAssemblyName, result.GetName().Name);
-            container.Dispose();
+            (serviceProvider as IDisposable).Dispose();
         }
     }
 }

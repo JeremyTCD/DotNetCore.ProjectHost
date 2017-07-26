@@ -1,6 +1,8 @@
 ﻿using JeremyTCD.DotNetCore.Utils;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using StructureMap;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -46,9 +48,11 @@ namespace JeremyTCD.DotNetCore.ProjectHost.Tests.EndToEndTests
 
             _directoryService.Copy(projectAbsSrcDir, tempDir, excludePatterns: new string[] { "^bin$", "^obj$" });
 
-            IContainer container = new Container(new ProjectHostRegistry());
-            ProjectLoader loader = container.GetInstance<ProjectLoader>();
-            MethodRunner runner = container.GetInstance<MethodRunner>();
+            IServiceCollection services = new ServiceCollection();
+            services.AddProjectHost();
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+            IProjectLoader loader = serviceProvider.GetService<IProjectLoader>();
+            IMethodRunner runner = serviceProvider.GetService<IMethodRunner>();
 
             // Act
             Assembly assembly = loader.Load(projectAbsFilePath, assemblyName);
@@ -56,7 +60,7 @@ namespace JeremyTCD.DotNetCore.ProjectHost.Tests.EndToEndTests
 
             // Assert
             Assert.Equal(testExitCode, result);
-            container.Dispose();
+            (serviceProvider as IDisposable).Dispose();
         }
 
         public static IEnumerable<object[]> RunRunsEntryMethodData()
