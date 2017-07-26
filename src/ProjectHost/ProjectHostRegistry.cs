@@ -21,7 +21,8 @@ namespace JeremyTCD.DotNetCore.ProjectHost
             For<IProcessService>().Singleton().Use<ProcessService>();
             For<ITypeService>().Singleton().Use<TypeService>();
 
-            For<ProjectRunner>().Singleton().Use<ProjectRunner>();
+            For<MethodRunner>().Singleton().Use<MethodRunner>();
+            For<ProjectLoader>().Singleton().Use<ProjectLoader>();
             For<IAssemblyLoadContextFactory>().Singleton().Use<DefaultAssemblyLoadContextFactory>();
         }
     }

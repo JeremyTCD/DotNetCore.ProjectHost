@@ -129,10 +129,10 @@
   <data name="Log_LoadingAssembly" xml:space="preserve">
     <value>Loading assembly "{0}" into an AssemblyLoadContext that resolves from directory "{1}"</value>
   </data>
-  <data name="Log_RunningEntryMethod" xml:space="preserve">
-    <value>Running entry method "{0}"  from class "{1}" of assembly "{2}" with args "{3}"</value>
+  <data name="Log_LoadingProject" xml:space="preserve">
+    <value>Loading project "{0}" with entry assembly "{1}" in configuration "{2}"</value>
   </data>
-  <data name="Log_RunningProject" xml:space="preserve">
-    <value>Running project "{0}" with arguments "{1}"</value>
+  <data name="Log_RunningMethod" xml:space="preserve">
+    <value>Running method "{0}" from class "{1}" of assembly "{2}" with args "{3}"</value>
   </data>
 </root>

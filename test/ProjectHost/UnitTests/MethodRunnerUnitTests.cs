@@ -7,11 +7,11 @@ using Xunit;
 
 namespace JeremyTCD.DotNetCore.ProjectHost.Tests.UnitTests
 {
-    public class ProjectRunnerUnitTests
+    public class MethodRunnerUnitTests
     {
         private MockRepository _mockRepository { get; }
 
-        public ProjectRunnerUnitTests()
+        public MethodRunnerUnitTests()
         {
             _mockRepository = new MockRepository(MockBehavior.Default) { DefaultValue = DefaultValue.Mock };
         }
@@ -23,7 +23,7 @@ namespace JeremyTCD.DotNetCore.ProjectHost.Tests.UnitTests
             string testEntryClassName = "testEntryClassName";
             string testAssemblyName = "testAssemblyName";
 
-            Mock<ILoggingService<ProjectRunner>> mockRunnerLS = _mockRepository.Create<ILoggingService<ProjectRunner>>();
+            Mock<ILoggingService<MethodRunner>> mockRunnerLS = _mockRepository.Create<ILoggingService<MethodRunner>>();
             mockRunnerLS.Setup(p => p.IsEnabled(LogLevel.Debug)).Returns(false);
 
             AssemblyName stubAssemblyName = new AssemblyName(testAssemblyName);
@@ -31,10 +31,10 @@ namespace JeremyTCD.DotNetCore.ProjectHost.Tests.UnitTests
             mockAssembly.Setup(a => a.GetType(testEntryClassName)).Returns((Type)null);
             mockAssembly.Setup(a => a.GetName()).Returns(stubAssemblyName);
 
-            ProjectRunner runner = CreateRunner(mockRunnerLS.Object);
+            MethodRunner runner = CreateLoader(mockRunnerLS.Object);
 
             // Act and Assert
-            Exception result = Assert.Throws<Exception>(() => runner.RunEntryMethod(mockAssembly.Object, testEntryClassName, null, null));
+            Exception result = Assert.Throws<Exception>(() => runner.Run(mockAssembly.Object, testEntryClassName, null, null));
             _mockRepository.VerifyAll();
             Assert.Equal(string.Format(Strings.Exception_AssemblyDoesNotHaveClass, testAssemblyName, testEntryClassName), result.Message);
         }
@@ -47,7 +47,7 @@ namespace JeremyTCD.DotNetCore.ProjectHost.Tests.UnitTests
             string testAssemblyName = "testAssemblyName";
             string testEntryMethodName = "testEntryMethodName";
 
-            Mock<ILoggingService<ProjectRunner>> mockRunnerLS = _mockRepository.Create<ILoggingService<ProjectRunner>>();
+            Mock<ILoggingService<MethodRunner>> mockRunnerLS = _mockRepository.Create<ILoggingService<MethodRunner>>();
             mockRunnerLS.Setup(p => p.IsEnabled(LogLevel.Debug)).Returns(false);
 
             Mock<Type> mockType = _mockRepository.Create<Type>();
@@ -61,19 +61,17 @@ namespace JeremyTCD.DotNetCore.ProjectHost.Tests.UnitTests
                 Setup(t => t.GetMethod(mockType.Object, testEntryMethodName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)).
                 Returns((MethodInfo)null);
 
-            ProjectRunner runner = CreateRunner(mockRunnerLS.Object, typeService: mockTypeService.Object);
+            MethodRunner runner = CreateLoader(mockRunnerLS.Object, typeService: mockTypeService.Object);
 
             // Act and Assert
-            Exception result = Assert.Throws<Exception>(() => runner.RunEntryMethod(mockAssembly.Object, testEntryClassName, testEntryMethodName, null));
+            Exception result = Assert.Throws<Exception>(() => runner.Run(mockAssembly.Object, testEntryClassName, testEntryMethodName, null));
             Assert.Equal(string.Format(Strings.Exception_ClassDoesNotHaveEntryMethod, testEntryClassName, testAssemblyName, testEntryMethodName), result.Message);
         }
 
-        private ProjectRunner CreateRunner(ILoggingService<ProjectRunner> loggingService = null, IPathService pathService = null, 
-            IMSBuildService msBuildService = null, IActivatorService activatorService = null, IDirectoryService directoryService = null,
-            ITypeService typeService = null, IAssemblyLoadContextFactory assemblyLoadContextFactory = null)
+        private MethodRunner CreateLoader(ILoggingService<MethodRunner> loggingService = null, IActivatorService activatorService = null,
+            ITypeService typeService = null)
         {
-            return new ProjectRunner(loggingService, pathService, msBuildService, activatorService, directoryService, typeService,
-                assemblyLoadContextFactory);
+            return new MethodRunner(loggingService, activatorService, typeService);
         }
     }
 }

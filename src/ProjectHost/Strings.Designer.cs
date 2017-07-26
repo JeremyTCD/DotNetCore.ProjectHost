@@ -98,20 +98,20 @@ namespace JeremyTCD.DotNetCore.ProjectHost {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Running entry method &quot;{0}&quot;  from class &quot;{1}&quot; of assembly &quot;{2}&quot; with args &quot;{3}&quot;.
+        ///   Looks up a localized string similar to Loading project &quot;{0}&quot; with entry assembly &quot;{1}&quot; in configuration &quot;{2}&quot;.
         /// </summary>
-        public static string Log_RunningEntryMethod {
+        public static string Log_LoadingProject {
             get {
-                return ResourceManager.GetString("Log_RunningEntryMethod", resourceCulture);
+                return ResourceManager.GetString("Log_LoadingProject", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Running project &quot;{0}&quot; with arguments &quot;{1}&quot;.
+        ///   Looks up a localized string similar to Running method &quot;{0}&quot; from class &quot;{1}&quot; of assembly &quot;{2}&quot; with args &quot;{3}&quot;.
         /// </summary>
-        public static string Log_RunningProject {
+        public static string Log_RunningMethod {
             get {
-                return ResourceManager.GetString("Log_RunningProject", resourceCulture);
+                return ResourceManager.GetString("Log_RunningMethod", resourceCulture);
             }
         }
     }
