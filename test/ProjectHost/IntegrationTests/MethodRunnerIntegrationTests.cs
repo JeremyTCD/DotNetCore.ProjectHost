@@ -1,7 +1,6 @@
 ﻿using JeremyTCD.DotNetCore.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using StructureMap;
 using System;
 using System.IO;
 using System.Reflection;
