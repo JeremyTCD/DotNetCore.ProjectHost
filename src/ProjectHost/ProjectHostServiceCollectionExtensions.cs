@@ -9,7 +9,6 @@ namespace JeremyTCD.DotNetCore.ProjectHost
         // TODO test
         public static void AddProjectHost(this IServiceCollection services)
         {
-            services.AddLogging();
             services.AddUtils();
 
             services.TryAdd(ServiceDescriptor.Singleton<IMethodRunner, MethodRunner>());
