@@ -6,6 +6,7 @@ namespace JeremyTCD.DotNetCore.ProjectHost
 {
     public static class ProjectHostServiceCollectionExtensions
     {
+        // TODO test
         public static void AddProjectHost(this IServiceCollection services)
         {
             services.AddLogging();
